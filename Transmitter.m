@@ -6,6 +6,7 @@ function res = Transmitter()
     
     TransmitI = vertcat(I, -1.*I);
     TransmitQ = vertcat(Q, -1.*Q);
+
     while 1
         USRP_SendSamples(I, Q, 5000)
     end
