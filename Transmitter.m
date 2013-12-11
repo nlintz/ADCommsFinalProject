@@ -4,5 +4,4 @@ function res = Transmitter()
     I = ones(n,1);
     Q = ones(n,1);
     USRP_SendSamples(I, Q, n)
-    
 end
