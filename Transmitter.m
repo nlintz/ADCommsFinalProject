@@ -6,5 +6,4 @@ function res = Transmitter()
     while 1
         USRP_SendSamples(I, Q, n)
     end
-    
 end
