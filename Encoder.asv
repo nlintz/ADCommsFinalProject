@@ -1,0 +1,8 @@
+function encodedMessage = Encoder(message)
+
+    encodedMessage = message;
+
+end
+
+function bin
+end
