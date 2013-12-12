@@ -39,9 +39,9 @@ classdef Receiver < handle
     methods(Static)
         function peak = findPeak(signal)
             fft_result = abs(fftshift(fft(signal)));
-            [M I] = max(fft_result);
+            [M index] = max(fft_result);
             
-            peak = abs(2*pi*(I/8000 - 1/2));
+            peak = abs(2*pi*(index/8000 - 1/2));
         end
     end
     methods(Static)
@@ -49,8 +49,6 @@ classdef Receiver < handle
             filtered_z = transpose(unfilteredZ).*exp(-1i*fd*linspace(1,length(unfilteredZ),length(unfilteredZ)));
             subplot(2, 1, 1)
             plot(real(filtered_z))
-            subplot(2, 1, 2)
-            plot(real(obj.Z))
             filteredZ = transpose(filtered_z);
         end
     end
