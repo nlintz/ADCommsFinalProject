@@ -1,10 +1,9 @@
 %input user, and message (perhaps just binary for now)
 
-%functions: stringToBinary, encodeBinary,binaryToVolt
+%functions to create: stringToBinary, encodeBinary,binaryToVolt
 
 function encodedMessage = Encoder(user,message)
 %user is string, message is double
-    
     encodedMessage = encodeCDMA(user,message);
 
 end
