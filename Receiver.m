@@ -1,14 +1,16 @@
-classdef Receiver<handle
+classdef Receiver < handle
     %UNTITLED7 Summary of this class goes here
     %   Detailed explanation goes here
-    properties
+    properties (SetAccess = private)
         I = []
         Q = []
         Z = []
-        data;
+        data = [];
+        peakFrequency;
     end
     
     methods
+        
         function obj=receieveData(obj, packetLength)
             addpath USRP_Tools\;
             [I Q] = USRP_RxPacket(packetLength, 50, 10, 100);
