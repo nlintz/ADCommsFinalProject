@@ -6,6 +6,7 @@ classdef Receiver<handle
         Q = []
         Z = []
         data = [];
+        peakFrequency;
     end
     
     methods
@@ -27,6 +28,10 @@ classdef Receiver<handle
             obj.Z = transpose(filtered_z);
             obj.I = real(obj.Z);
             obj.Z = imag(obj.Z);
+        end
+
+        function obj = findPeak(obj, signal)
+            obj.peakFrequency = abs(fftshift(fft(signal)));
         end
         
         function plotFFT(obj, signal)
