@@ -5,15 +5,13 @@ classdef Receiver<handle
         I = []
         Q = []
         Z = []
-        data = [];
-        peakFrequency;
+        data;
     end
     
     methods
         function obj=receieveData(obj, packetLength)
             addpath USRP_Tools\;
-            obj.data = USRP_RxPacket(packetLength, 50, 10, 100);
-            [I Q] = obj.data;
+            [I Q] = USRP_RxPacket(packetLength, 50, 10, 100);
             obj.I = I;
             obj.Q = Q;
             obj.Z = I + 1i.*Q;
@@ -37,7 +35,8 @@ classdef Receiver<handle
     end
     
     methods(Static)
-        function peak = findPeak(obj, signal)
+        function peak = findPeak(signal)
+            peak = signal;
         end
     end
     
