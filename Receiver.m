@@ -28,17 +28,17 @@ classdef Receiver<handle
             obj.Z = transpose(filtered_z);
             obj.I = real(obj.Z);
             obj.Z = imag(obj.Z);
-        end
-
-        function obj = findPeak(obj, signal)
-            obj.peakFrequency = abs(fftshift(fft(signal)));
-        end
-        
+        end        
         function plotFFT(obj, signal)
             clf
             plot(linspace(-pi,pi,length(signal)),abs(fftshift(fft(signal))))
         end
         
+    end
+    
+    methods(Static)
+        function peak = findPeak(obj, signal)
+        end
     end
     
 end
