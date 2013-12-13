@@ -70,6 +70,14 @@ classdef Receiver < handle
             signalFFT = abs(fftshift(fft(signal)));
         end
     end
+    
+    methods(Static)
+        function shiftedZ = correctPhaseShift(signal)
+            avg = mean(real(signal)) + 1i.*mean(imag(signal));
+            phase_shift_angle = angle(avg) - pi/4;
+            shiftedZ = signal .* exp(-i*phase_shift_angle);
+        end
+    end
 end
 function peak = findPeak(signal)
     x = linspace(-pi, pi, length(signal));
@@ -80,10 +88,10 @@ end
 function filteredZ = filterPeak(unfilteredZ, fd)
     filtered_z = transpose(unfilteredZ).*exp(-1i*fd*linspace(1,length(unfilteredZ),length(unfilteredZ)));
     subplot(3, 1, 1)
-    plot(real(filtered_z))
+    plot(real(filtered_z));
     xlabel('I channel')
     subplot(3, 1, 2)
-    plot(imag(filtered_z))
+    plot(imag(filtered_z));
     xlabel('Q channel')
     subplot(3, 1, 3)
     plot(real(filtered_z), imag(filtered_z));
