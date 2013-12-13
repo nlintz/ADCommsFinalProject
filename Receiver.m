@@ -50,7 +50,7 @@ classdef Receiver < handle
     end
     
     methods(Static)
-        function filteredZ = filter(unfilteredZ)
+        function filteredZ = filterSignal(unfilteredZ)
             z = unfilteredZ;
             for i=1:2   
                 z = filterPeak(z, findPeak(z));
