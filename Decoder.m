@@ -17,7 +17,7 @@ function decodedMessage = decodeCDMA(user, data)
         vbinaryMessage = vbinaryMessage((1+length(userCode)):end);
         originalMessage(i) = dot(symbolBin, userCode)/length(userCode);
     end
-    sbinaryMessage = voltToStringBinary(originalMessage)
+    sbinaryMessage = voltToStringBinary(originalMessage);
     decodedMessage = binaryToMessage(sbinaryMessage);
 end
 
@@ -54,4 +54,13 @@ function sbinaryMessage = voltToStringBinary(vbinaryMessage)
             sbinaryMessage(i) = '1';
         end
     end
+end
+
+function contractedMessage = contractMessage(message, n)
+    %contract message by taking every block of n, finding average, and
+    %based on whether or not average is < or > 0
+
+end
+
+function contractedMessage = contractMessage2(message, n)
 end

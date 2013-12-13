@@ -9,22 +9,22 @@ function encodedMessage = Encoder(user,message)
 end
 
 function encodedMessage = encodeCDMA(user,message)
-%user is string, message is string
+%user is string, message is string, expanded elements by n = 3
     protocol = Protocol();
     sbinaryMessage = messageToBinary(message);
-    sbinaryMessage = stringToVoltBinary(sbinaryMessage);
+    vbinaryMessage = stringToVoltBinary(sbinaryMessage);
+    expandedVMessage = expandMessage(vbinaryMessage, 3);
     userCode = protocol(user);
     
-    vbinaryMessage = zeros(1,length(sbinaryMessage)*length(userCode));
+    encodedMessage = zeros(1,length(expandedVMessage)*length(userCode));
     bitPlace = 0;
     
-    for i = 1: length(sbinaryMessage)
+    for i = 1: length(expandedVMessage)
         for j = 1:length(userCode)
             bitPlace = bitPlace + 1;
-            vbinaryMessage(bitPlace) = sbinaryMessage(i)*userCode(j);
+            encodedMessage(bitPlace) = expandedVMessage(i)*userCode(j);
         end
     end
-    encodedMessage = vbinaryMessage;
 end
 
 function sbinary = messageToBinary(message)
@@ -45,5 +45,15 @@ function vbinaryMessage = stringToVoltBinary(sbinaryMessage)
         else
             vbinaryMessage(i) = 1;
         end
+    end
+end
+
+function expandedMessage = expandMessage(message, n)
+    %n is number by which each element is expanded by
+    expandedMessage = [];
+    for i = 1:length(message)
+        expandedElement = zeros(1, n) + message(i);
+        expandedMessage = cat(1, expandedMessage, expandedElement);
+        expandedMessage = cat(1, expandedMessage, zeros(1,n));
     end
 end
