@@ -1,15 +1,15 @@
 %functions to create voltToBinary, binaryToString, decodeBinary,
 %rawToBinary
 
-function decodedMessage = Decoder(user, data)
-    decodedMessage = decodeCDMA(user, data);
+function decodedMessage = Decoder(user, encodedMessage)
+    decodedMessage = decodeCDMA(user, encodedMessage);
 end
 
-function decodedMessage = decodeCDMA(user, data)
+function decodedMessage = decodeCDMA(user, encodedMessage)
 %user is string, data is array of [-1,-1,-1, 0,0,0, 1,1,1]
     protocol = Protocol();
     userCode = protocol(user);
-    vbinaryMessage = contractMessage(data,3);
+    vbinaryMessage = contractMessage(encodedMessage,3);
     
     originalMessage = zeros(1, length(vbinaryMessage)/length(userCode));
     
