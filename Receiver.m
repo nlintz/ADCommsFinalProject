@@ -80,6 +80,13 @@ classdef Receiver < handle
     end
     
     methods(Static)
+        function processedSignal = removeNoise(signal)
+            noiselessSignal = removeNoise(signal);
+            processedSignal = signal(findFirstPoint(noiselessSignal): findLastPoint(noiselessSignal));
+        end
+    end
+    
+    methods(Static)
         function processedSignal = processSignal(signal, trainingPacketLength)
             noiselessSignal = removeNoise(signal);
             resampledSignal = signal(findFirstPoint(noiselessSignal): findLastPoint(noiselessSignal));

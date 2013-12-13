@@ -1,4 +1,9 @@
 function res = errorRate(expectedSignal, receivedSignal)
-    res = (sum(expectedSignal) - sum(threshold(receivedSignal))) / length(receivedSignal);
-
+    errors = 0;
+    for i=1:min([length(expectedSignal), length(receivedSignal)])
+        if (expectedSignal(i) ~= receivedSignal(i))
+            errors = errors + 1;
+        end
+    end
+    res = errors;
 end
