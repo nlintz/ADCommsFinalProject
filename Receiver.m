@@ -21,7 +21,7 @@ classdef Receiver < handle
         
         function showFFT(obj)
             clf
-            plot(linspace(-pi,pi,length(obj.I)),abs(fftshift(fft(obj.I))))
+            plot(linspace(-pi,pi,length(obj.I)),abs(fftshift(fft(obj.I))));
         end
         
     end
@@ -50,6 +50,16 @@ classdef Receiver < handle
     end
     
     methods(Static)
+        function filteredZ = filter(unfilteredZ)
+            z = unfilteredZ;
+            for i=1:2   
+                z = filterPeak(z, findPeak(z));
+            end
+            filteredZ = z;
+        end
+    end
+    
+    methods(Static)
         function plotFFT(signal)
             plot(linspace(-pi,pi,length(signal)),abs(fftshift(fft(signal))));
         end
@@ -60,6 +70,22 @@ classdef Receiver < handle
             signalFFT = abs(fftshift(fft(signal)));
         end
     end
-   
-    
+end
+function peak = findPeak(signal)
+    x = linspace(-pi, pi, length(signal));
+    fft_result = abs(fftshift(fft(signal)));
+    [M index] = max(fft_result);
+    peak = x(index);
+end
+function filteredZ = filterPeak(unfilteredZ, fd)
+    filtered_z = transpose(unfilteredZ).*exp(-1i*fd*linspace(1,length(unfilteredZ),length(unfilteredZ)));
+    subplot(3, 1, 1)
+    plot(real(filtered_z))
+    xlabel('I channel')
+    subplot(3, 1, 2)
+    plot(imag(filtered_z))
+    xlabel('Q channel')
+    subplot(3, 1, 3)
+    plot(real(filtered_z), imag(filtered_z));
+    filteredZ = transpose(filtered_z);
 end
