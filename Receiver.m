@@ -37,9 +37,13 @@ classdef Receiver < handle
     methods(Static)
         function filteredZ = filterPeak(unfilteredZ, fd)
             filtered_z = transpose(unfilteredZ).*exp(-1i*fd*linspace(1,length(unfilteredZ),length(unfilteredZ)));
-            subplot(2, 1, 1)
+            subplot(3, 1, 1)
             plot(real(filtered_z))
-            subplot(2, 1, 2)
+            xlabel('I channel')
+            subplot(3, 1, 2)
+            plot(imag(filtered_z))
+            xlabel('Q channel')
+            subplot(3, 1, 3)
             plot(real(filtered_z), imag(filtered_z));
             filteredZ = transpose(filtered_z);
         end
@@ -50,5 +54,12 @@ classdef Receiver < handle
             plot(linspace(-pi,pi,length(signal)),abs(fftshift(fft(signal))));
         end
     end
+    
+    methods(Static)
+        function signalFFT = getFFT(signal)
+            signalFFT = abs(fftshift(fft(signal)));
+        end
+    end
+   
     
 end
