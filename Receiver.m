@@ -89,7 +89,7 @@ classdef Receiver < handle
             resampledSignal = signal(findFirstPoint(noiselessSignal): findLastPoint(noiselessSignal));
             trainingHeader = resampledSignal(1:trainingPacketLength);
             frequencyOffset = findPeak(signal);
-            filteredSignal = filterPeak(resampledSignal(1:trainingPacketLength), frequencyOffset);
+            filteredSignal = filterPeak(resampledSignal, frequencyOffset);
             phaseCorrectedSignal = correctPhaseShift(filteredSignal, trainingPacketLength);
             processedSignal = phaseCorrectedSignal;
         end
