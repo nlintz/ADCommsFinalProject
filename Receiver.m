@@ -13,7 +13,7 @@ classdef Receiver < handle
         
         function obj=receieveData(obj, packetLength)
             addpath USRP_Tools\;
-            [I Q] = USRP_RxPacket(packetLength, 50, 15, 100);
+            [I Q] = USRP_RxPacket(packetLength, 50, 15, 50);
             obj.I = I;
             obj.Q = Q;
             obj.Z = I + 1i.*Q;
@@ -50,10 +50,10 @@ classdef Receiver < handle
     end
     
     methods(Static)
-        function filteredZ = filterSignal(unfilteredZ)
+        function filteredZ = filterSignal(unfilteredZ, trainingPacketLength)
             z = unfilteredZ;
-            for i=1:2   
-                z = filterPeak(z, findPeak(z));
+            for i=1:1
+                z = filterPeak(z, findPeak(z(1:trainingPacketLength)));
             end
             filteredZ = z;
         end
@@ -72,10 +72,20 @@ classdef Receiver < handle
     end
     
     methods(Static)
-        function shiftedZ = correctPhaseShift(signal)
-            avg = mean(real(signal)) + 1i.*mean(imag(signal));
+        function shiftedZ = correctPhaseShift(signal, trainingPacketLength)
+            avg = mean(real(signal(1:trainingPacketLength))) + 1i.*mean(imag(signal(1:trainingPacketLength)));
             phase_shift_angle = angle(avg) - pi/4;
             shiftedZ = signal .* exp(-i*phase_shift_angle);
+        end
+    end
+    
+    methods(Static)
+        function processedSignal = processSignal(signal, trainingPacketLength)
+            noiselessSignal = removeNoise(signal);
+            resampledSignal = signal(findFirstPoint(noiselessSignal): findLastPoint(noiselessSignal));
+            filteredSignal = filterSignal(resampledSignal,trainingPacketLength);
+            phaseCorrectedSignal = correctPhaseShift(filteredSignal, trainingPacketLength);
+            processedSignal = phaseCorrectedSignal;
         end
     end
 end
@@ -97,3 +107,40 @@ function filteredZ = filterPeak(unfilteredZ, fd)
     plot(real(filtered_z), imag(filtered_z));
     filteredZ = transpose(filtered_z);
 end
+function res = findFirstPoint(signal)
+    for i=1:length(signal)
+        if (signal(i) ~= 0)
+            res = i;
+            break
+        end
+    end
+end
+function res = findLastPoint(signal)
+    for i=1:length(signal)
+        if (signal(i) ~= 0)
+            res = i;
+        end
+    end
+end
+function filteredZ = filterSignal(unfilteredZ, trainingPacketLength)
+    z = unfilteredZ;
+    for i=1:1
+        z = filterPeak(z, findPeak(z(1:trainingPacketLength)));
+    end
+    filteredZ = z;
+end
+function res = removeNoise(signal)
+    maxAmplitude = max(abs(signal));
+    for i=1:length(signal)
+        if abs(signal(i)) < .5*maxAmplitude
+            signal(i) = 0;
+        end
+    end
+    res = signal;
+end
+function shiftedZ = correctPhaseShift(signal, trainingPacketLength)
+    avg = mean(real(signal(1:trainingPacketLength))) + 1i.*mean(imag(signal(1:trainingPacketLength)));
+    phase_shift_angle = angle(avg) - pi/4;
+    shiftedZ = signal .* exp(-i*phase_shift_angle);
+end
+
