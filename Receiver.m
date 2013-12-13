@@ -13,7 +13,7 @@ classdef Receiver < handle
         
         function obj=receieveData(obj, packetLength)
             addpath USRP_Tools\;
-            [I Q] = USRP_RxPacket(packetLength, 50, 15, 50);
+            [I Q] = USRP_RxPacket(packetLength, 50, 5, 50);
             obj.I = I;
             obj.Q = Q;
             obj.Z = I + 1i.*Q;
@@ -28,23 +28,20 @@ classdef Receiver < handle
     
     methods(Static)
         function peak = findPeak(signal)
-            x = linspace(-pi, pi, length(signal));
-            fft_result = abs(fftshift(fft(signal)));
-            [M index] = max(fft_result);
-            peak = x(index);
+            peak = findPeak(signal);
         end
     end
     methods(Static)
         function filteredZ = filterPeak(unfilteredZ, fd)
             filtered_z = transpose(unfilteredZ).*exp(-1i*fd*linspace(1,length(unfilteredZ),length(unfilteredZ)));
-            subplot(3, 1, 1)
-            plot(real(filtered_z))
-            xlabel('I channel')
-            subplot(3, 1, 2)
-            plot(imag(filtered_z))
-            xlabel('Q channel')
-            subplot(3, 1, 3)
-            plot(real(filtered_z), imag(filtered_z));
+%             subplot(3, 1, 1)
+%             plot(real(filtered_z))
+%             xlabel('I channel')
+%             subplot(3, 1, 2)
+%             plot(imag(filtered_z))
+%             xlabel('Q channel')
+%             subplot(3, 1, 3)
+%             plot(real(filtered_z), imag(filtered_z));
             filteredZ = transpose(filtered_z);
         end
     end
@@ -90,7 +87,9 @@ classdef Receiver < handle
         function processedSignal = processSignal(signal, trainingPacketLength)
             noiselessSignal = removeNoise(signal);
             resampledSignal = signal(findFirstPoint(noiselessSignal): findLastPoint(noiselessSignal));
-            filteredSignal = filterSignal(resampledSignal,trainingPacketLength);
+            trainingHeader = resampledSignal(1:trainingPacketLength);
+            frequencyOffset = findPeak(signal);
+            filteredSignal = filterPeak(resampledSignal(1:trainingPacketLength), frequencyOffset);
             phaseCorrectedSignal = correctPhaseShift(filteredSignal, trainingPacketLength);
             processedSignal = phaseCorrectedSignal;
         end
@@ -98,20 +97,12 @@ classdef Receiver < handle
 end
 function peak = findPeak(signal)
     x = linspace(-pi, pi, length(signal));
-    fft_result = abs(fftshift(fft(signal)));
+    fft_result = abs(fftshift(fft(signal.^4)));
     [M index] = max(fft_result);
-    peak = x(index);
+    peak = x(index)/4;
 end
 function filteredZ = filterPeak(unfilteredZ, fd)
     filtered_z = transpose(unfilteredZ).*exp(-1i*fd*linspace(1,length(unfilteredZ),length(unfilteredZ)));
-    subplot(3, 1, 1)
-    plot(real(filtered_z));
-    xlabel('I channel')
-    subplot(3, 1, 2)
-    plot(imag(filtered_z));
-    xlabel('Q channel')
-    subplot(3, 1, 3)
-    plot(real(filtered_z), imag(filtered_z));
     filteredZ = transpose(filtered_z);
 end
 function res = findFirstPoint(signal)
