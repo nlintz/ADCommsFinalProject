@@ -6,10 +6,10 @@ function decodedMessage = Decoder(user, encodedMessage)
 end
 
 function decodedMessage = decodeCDMA(user, encodedMessage)
-%user is string, data is array of [-1,-1,-1, 0,0,0, 1,1,1]
+%user is string, data is array of [-1,-1,-1, 1,1,1]
     protocol = Protocol();
     userCode = protocol(user);
-    vbinaryMessage = contractMessage(encodedMessage,3);
+    vbinaryMessage = contractMessage(encodedMessage,100);
     
     originalMessage = zeros(1, length(vbinaryMessage)/length(userCode));
     
@@ -64,7 +64,7 @@ function contractedMessage = contractMessage(message, n)
         for i = 1:(length(message)/n)
             pulse = message(1:n);
             average = mean(pulse);
-            [bincounts, ind] = histc([average], [-1,0,1]);
+            [bincounts, ind] = histc([average], [-1,1]);
             if bincounts(1) == 1
                 contractedMessage = cat(2, contractedMessage, -1);
             elseif bincounts(3) == 1
