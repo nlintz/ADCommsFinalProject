@@ -55,6 +55,6 @@ function expandedMessage = expandMessage(message, n)
     for i = 1:length(message)
         pulse = zeros(1, n) + message(i);
         expandedMessage = cat(2, expandedMessage, pulse);
-        expandedMessage = cat(2, expandedMessage, zeros(1,n));
+        %expandedMessage = cat(2, expandedMessage, zeros(1,n));
     end
 end
