@@ -62,9 +62,12 @@ function contractedMessage = contractMessage(message, n)
     %contract message by taking every block of n, finding average, and
     %based on whether or not average is < or > 0
     contractedMessage = [];
+%         (length(message)/n)
+%         n
         for i = 1:(length(message)/n)
             pulse = message(1:n);
             average = mean(pulse);
+            average
             [bincounts, ind] = histc([average], [-1,1]);
             if bincounts(1) == 1
                 contractedMessage = cat(2, contractedMessage, -1);
