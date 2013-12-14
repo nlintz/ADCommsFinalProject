@@ -4,20 +4,22 @@ function res = Transmitter(user, message)
     encodedMessage = Encoder(user, message);
     
     n = length(encodedMessage);
-    
+    I = [];
+    Q = [];
     for i = 1: n
         if rem(i,2) == 1
-            I = encodedMessage(i);
+            I = cat(I,encodedMessage(i));
         else
-            Q = encodedMessage(i);
+            Q = cat(Q,encodedMessage(i));
         end
     end
     
     %TransmitI = vertcat(I,I, -1.*I, -1.*I);
     %TransmitQ = vertcat(Q,-1.*Q,Q, -1.*Q);
     
-    TransmitI = I
-    TransmitQ = Q
+    TransmitI = vertcat(ones(2000,1),I);
+    size(TransmitI)
+    TransmitQ = vertcat(ones(2000,1),Q);
 
     while 1
         %USRP_SendSamples(I, Q, n)
