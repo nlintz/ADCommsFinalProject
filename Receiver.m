@@ -11,7 +11,7 @@ classdef Receiver < handle
     
     methods
         
-        function obj=receieveData(obj, packetLength)
+        function obj=receiveData(obj, packetLength)
             addpath USRP_Tools\;
             [I Q] = USRP_RxPacket(packetLength, 50, 15, 50);
             obj.I = I;
