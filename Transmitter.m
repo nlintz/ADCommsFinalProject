@@ -1,24 +1,20 @@
-function res = Transmitter(user, message)
+function res = Transmitter(user1, message1, user2, message2, user3, message3)
     addpath USRP_Tools\
     
-    encodedMessage = transpose(Encoder(user, message));
+    encodedMessage1 = transpose(CDMA(user1, message1, user2, message2));
+    encodedMessage2 = transpose(Encoder(user3, message3));
     
-    %TransmitI = vertcat(I,I, -1.*I, -1.*I);
-    %TransmitQ = vertcat(Q,-1.*Q,Q, -1.*Q);
+    I = encodedMessage1;
+    Q = encodedMessage2;
     
-    I = encodedMessage;
-    Q = encodedMessage;
-%     encodedMessage
-%     ones(2000,1)
-%     TransmitI = vertcat(ones(2000,1),I)
-    I = ones(2000,1)
-    TransmitI = vertcat(I, -1.*I,I, -1.*I);
-    TransmitQ = TransmitI;
-    size(encodedMessage)
-%     TransmitQ = vertcat(ones(2000,1),Q);
-
+    ones(2000,1);
+    TransmitI = vertcat(ones(2000,1),I);
+    TransmitQ = vertcat(ones(2000,1),Q);
+    
+    length(TransmitI)
     while 1
         %USRP_SendSamples(I, Q, n)
         USRP_SendSamples(TransmitI, TransmitQ, length(TransmitI))
+        
     end
 end
