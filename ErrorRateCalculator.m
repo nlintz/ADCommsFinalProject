@@ -1,25 +1,28 @@
-function errorRate = ErrorRateCalculator(user, message, encodedMessage)
+function errorRate = ErrorRateCalculator(user1, message1, user2, message2, encodedCDMA)
     %get expected encodedBits
-    encodedBits = messageToBinary(message);
+    encodedBits = [messageToBinary(message1),messageToBinary(message2)];
+    
     
     %get expected decodedBits
     protocol = Protocol();
-    userCode = protocol(user);
-    vbinaryMessage = contractMessage(encodedMessage,3);
+    userCode1 = protocol(user1);
+    userCode2 = protocol(user2);
     
-    originalMessage = zeros(1, length(vbinaryMessage)/length(userCode));
+    vbinaryMessage = contractMessage(encodedCDMA,20);
     
-    for i = 1:length(vbinaryMessage)/length(userCode)
-        symbolBin = vbinaryMessage(1:length(userCode));
-        vbinaryMessage = vbinaryMessage((1+length(userCode)):end);
-        originalMessage(i) = dot(symbolBin, userCode)/length(userCode);
+    originalMessage = zeros(1, length(vbinaryMessage)/length(userCode1));
+    
+    for i = 1:length(vbinaryMessage)/length(userCode1)
+        symbolBin = vbinaryMessage(1:length(userCode1));
+        vbinaryMessage = vbinaryMessage((1+length(userCode1)):end);
+        originalMessage(i) = dot(symbolBin, userCode1)/length(userCode1);
     end
     decodedBits = voltToStringBinary(originalMessage);
 
     %error calculation
     errorCount = 0.0;
     
-    for i = 1: length(encodedBits)
+    for i = 1: length(encodedBits) 
         if encodedBits(i) ~= decodedBits(i)
             errorCount = errorCount +1;
         end
