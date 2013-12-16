@@ -10,15 +10,25 @@ function errorRate = ErrorRateCalculator(user1, message1, user2, message2, encod
     
     vbinaryMessage = contractMessage(encodedCDMA,20);
     
-    originalMessage = zeros(1, length(vbinaryMessage)/length(userCode1));
     
+    originalMessage = zeros(1, length(vbinaryMessage)/length(userCode1));
     for i = 1:length(vbinaryMessage)/length(userCode1)
         symbolBin = vbinaryMessage(1:length(userCode1));
         vbinaryMessage = vbinaryMessage((1+length(userCode1)):end);
         originalMessage(i) = dot(symbolBin, userCode1)/length(userCode1);
     end
     decodedBits = voltToStringBinary(originalMessage);
-
+    length(decodedBits)
+    
+    originalMessage = zeros(1, length(vbinaryMessage)/length(userCode2));
+    for i = 1:length(vbinaryMessage)/length(userCode2)
+        symbolBin = vbinaryMessage(1:length(userCode2));
+        vbinaryMessage = vbinaryMessage((1+length(userCode2)):end);
+        originalMessage(i) = dot(symbolBin, userCode2)/length(userCode2);
+    end
+    decodedBits = [decodedBits,voltToStringBinary(originalMessage)];
+    
+    
     %error calculation
     errorCount = 0.0;
     
