@@ -10,10 +10,10 @@ function protocol = getProtocol()
 %generate protocol map simple
 
     protocol = containers.Map;
-    protocol('user1') = [1,-1,1,-1];
-    protocol('user2') = [1,1,1,1];
-    protocol('user3') = [1,1,-1,-1];
-    protocol('user4') = [1,-1,-1,1];
+    protocol('user1') = [1,-1];
+    protocol('user2') = [1,1];
+%     protocol('user3') = [1,1,-1,-1];
+%     protocol('user4') = [1,-1,-1,1];
 end
 
 % function protocol = getProtocol2()
