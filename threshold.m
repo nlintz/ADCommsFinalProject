@@ -1,12 +1,17 @@
 function res = threshold(data)
-%data = 2*rand(50,1)-1;
 datath = zeros(1,length(data));
+maxData = max(data)
 for i=1:length(data)
     if data(i) < 0
-        datath(i) = -1;
-    else
-        datath(i) = 1;
+        datath(i) = -2;
     end
+    if data(i) == 0
+        datath(i) = 0;
+    end
+    if data(i) > 0
+        datath(i) = 2;
+    end
+    
 end
 res = datath;
 end
