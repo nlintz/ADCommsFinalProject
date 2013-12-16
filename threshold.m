@@ -1,6 +1,5 @@
 function res = threshold(data)
 datath = zeros(1,length(data));
-maxData = max(data)
 for i=1:length(data)
     if data(i) < 0
         datath(i) = -2;
