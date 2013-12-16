@@ -1,33 +1,36 @@
 function errorRate = ErrorRateCalculator(user1, message1, user2, message2, encodedCDMA)
     %get expected encodedBits
     encodedBits = [messageToBinary(message1),messageToBinary(message2)];
-    
-    
+    length(encodedBits)
+
     %get expected decodedBits
     protocol = Protocol();
     userCode1 = protocol(user1);
     userCode2 = protocol(user2);
     
-    vbinaryMessage = contractMessage(encodedCDMA,20);
+    vbinaryMessage1 = contractMessage(encodedCDMA,40);
+    vbinaryMessage2 = contractMessage(encodedCDMA,40);
     
-    
-    originalMessage = zeros(1, length(vbinaryMessage)/length(userCode1));
-    for i = 1:length(vbinaryMessage)/length(userCode1)
-        symbolBin = vbinaryMessage(1:length(userCode1));
-        vbinaryMessage = vbinaryMessage((1+length(userCode1)):end);
+    originalMessage = zeros(1, length(vbinaryMessage1)/length(userCode1));
+    for i = 1:length(vbinaryMessage1)/length(userCode1)
+        symbolBin = vbinaryMessage1(1:length(userCode1));
+        vbinaryMessage1 = vbinaryMessage1((1+length(userCode1)):end);
         originalMessage(i) = dot(symbolBin, userCode1)/length(userCode1);
     end
-    decodedBits = voltToStringBinary(originalMessage);
-    length(decodedBits)
+    decodedBits1 = voltToStringBinary(originalMessage);
+    length(decodedBits1)
     
-    originalMessage = zeros(1, length(vbinaryMessage)/length(userCode2));
-    for i = 1:length(vbinaryMessage)/length(userCode2)
-        symbolBin = vbinaryMessage(1:length(userCode2));
-        vbinaryMessage = vbinaryMessage((1+length(userCode2)):end);
+    originalMessage = zeros(1, length(vbinaryMessage2)/length(userCode2));
+    for i = 1:length(vbinaryMessage2)/length(userCode2)
+        symbolBin = vbinaryMessage2(1:length(userCode2));
+        vbinaryMessage2 = vbinaryMessage2((1+length(userCode2)):end);
         originalMessage(i) = dot(symbolBin, userCode2)/length(userCode2);
     end
-    decodedBits = [decodedBits,voltToStringBinary(originalMessage)];
+    decodedBits2 = voltToStringBinary(originalMessage);
+    length(decodedBits2)
     
+    decodedBits = [decodedBits1,decodedBits2];
+    length(decodedBits)
     
     %error calculation
     errorCount = 0.0;
@@ -37,7 +40,7 @@ function errorRate = ErrorRateCalculator(user1, message1, user2, message2, encod
             errorCount = errorCount +1;
         end
     end
-    errorRate = errorCount/length(encodedBits);
+    errorRate = errorCount/double(length(encodedBits));
 end
 
 function sbinary = messageToBinary(message)
@@ -67,12 +70,13 @@ function contractedMessage = contractMessage(message, n)
         for i = 1:(length(message)/n)
             pulse = message(1:n);
             average = mean(pulse);
-            [bincounts, ind] = histc([average], [-1,0,1]);
-            if bincounts(1) == 1
-                contractedMessage = cat(2, contractedMessage, -1);
-            elseif bincounts(3) == 1
-                contractedMessage = cat(2, contractedMessage, 1);
-            end  
+            if average >= 1
+                contractedMessage = cat(2, contractedMessage, 2);
+            elseif average <= -1
+                contractedMessage = cat(2, contractedMessage, -2);
+            else
+                contractedMessage = cat(2, contractedMessage, 0);
+            end
             if length(message)~= n
                 message = message((n+1):end);
             end

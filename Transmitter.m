@@ -19,6 +19,6 @@ function res = Transmitter(user1, message1, user2, message2)
     
     while 1
         %USRP_SendSamples(I, Q, n)
-        USRP_SendSamples(TransmitI.*5, TransmitQ.*5, length(TransmitI))
+        USRP_SendSamples(TransmitI.*10, TransmitQ.*10, length(TransmitI))
     end
 end
