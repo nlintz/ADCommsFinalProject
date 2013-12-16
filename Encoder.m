@@ -24,7 +24,7 @@ function encodedMessage = encodeCDMA(user,message)
             encodedMessage(bitPlace) = vbinaryMessage(i)*userCode(j);
         end
     end
-    encodedMessage = expandMessage(encodedMessage, 6);
+    encodedMessage = expandMessage(encodedMessage, 20);
 end
 
 function sbinary = messageToBinary(message)

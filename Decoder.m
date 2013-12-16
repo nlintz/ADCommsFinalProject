@@ -10,7 +10,7 @@ function decodedMessage = decodeCDMA(user, encodedMessage)
 %n even
     protocol = Protocol();
     userCode = protocol(user);
-    vbinaryMessage = contractMessage(encodedMessage,6);
+    vbinaryMessage = contractMessage(encodedMessage,20);
     
     originalMessage = zeros(1, length(vbinaryMessage)/length(userCode));
     
