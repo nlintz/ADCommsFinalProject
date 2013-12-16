@@ -9,7 +9,7 @@ function encodedMessage = Encoder(user,message)
 end
 
 function encodedMessage = encodeCDMA(user,message)
-%user is string, message is string ('hello'), expanded elements by n = 20 
+%user is string, message is string ('hello'), expanded elements by n = 6 
     protocol = Protocol();
     sbinaryMessage = messageToBinary(message);
     vbinaryMessage = stringToVoltBinary(sbinaryMessage);
@@ -24,7 +24,7 @@ function encodedMessage = encodeCDMA(user,message)
             encodedMessage(bitPlace) = vbinaryMessage(i)*userCode(j);
         end
     end
-    encodedMessage = expandMessage(encodedMessage, 20);
+    encodedMessage = expandMessage(encodedMessage, 6);
 end
 
 function sbinary = messageToBinary(message)
