@@ -24,7 +24,7 @@ function decodedMessage = decodeCDMA(user, encodedMessage)
 end
 
 function message = binaryToMessage(sbinary)
-    message = blanks(length(sbinary)/7);
+    message = blanks(floor(length(sbinary)/7));
     for i = 1:(length(sbinary)/7);
         decLetter = bin2dec(sbinary(1:7));
         strLetter = char(decLetter);
