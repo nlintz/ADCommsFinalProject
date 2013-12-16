@@ -86,13 +86,20 @@ classdef Receiver < handle
     methods(Static)
         function processedSignal = processSignal(signal, trainingPacketLength)
             noiselessSignal = removeNoise(signal);
-            resampledSignal = signal(findFirstPoint(noiselessSignal): findLastPoint(noiselessSignal));
-%             resampledSignal = signal(50:length(signal));
+            resampledSignal = signal(findFirstPoint(noiselessSignal): findLastPoint(noiselessSignal)); %TODO signal -> noiseless signal?
             trainingHeader = resampledSignal(1:trainingPacketLength);
             frequencyOffset = findPeak(resampledSignal);
             filteredSignal = filterPeak(resampledSignal, frequencyOffset);
             phaseCorrectedSignal = correctPhaseShift(filteredSignal, trainingPacketLength);
             processedSignal = phaseCorrectedSignal;
+        end
+    end
+    
+    methods(Static)
+        function truncatedSignal = truncateSignal(signal)
+                noiselessSignal = removeNoise(signal);
+                truncatedSignal = signal(findFirstPoint(noiselessSignal): findLastPoint(noiselessSignal));
+
         end
     end
 end
@@ -131,7 +138,7 @@ end
 function res = removeNoise(signal)
     maxAmplitude = max(abs(signal));
     for i=1:length(signal)
-        if abs(signal(i)) < .70*maxAmplitude
+        if abs(signal(i)) < .55*maxAmplitude
             signal(i) = 0;
         end
     end

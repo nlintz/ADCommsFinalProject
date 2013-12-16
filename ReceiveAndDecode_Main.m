@@ -9,8 +9,8 @@ function [real_message, imag_message] = ReceiveAndDecodeMain(packetLength, train
     imag_message = raw_message_encoded_imag;
     
     Decoder('user1', raw_message_encoded_real)
-    Decoder('user2', raw_message_encoded_real)
+%     Decoder('user2', raw_message_encoded_real)
     Decoder('user1', raw_message_encoded_imag)
-    Decoder('user2', raw_message_encoded_imag)
+%     Decoder('user2', raw_message_encoded_imag)
 
 end
