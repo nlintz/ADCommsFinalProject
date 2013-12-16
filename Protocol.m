@@ -13,6 +13,7 @@ function protocol = getProtocol()
     protocol = containers.Map;
     protocol('user1') = code;
     protocol('user2') = [1,1];
+    protocol('user3') = 
 end
 
 % function protocol = getProtocol2()
