@@ -87,6 +87,7 @@ classdef Receiver < handle
         function processedSignal = processSignal(signal, trainingPacketLength)
             noiselessSignal = removeNoise(signal);
             resampledSignal = signal(findFirstPoint(noiselessSignal): findLastPoint(noiselessSignal));
+%             resampledSignal = signal(50:length(signal));
             trainingHeader = resampledSignal(1:trainingPacketLength);
             frequencyOffset = findPeak(resampledSignal);
             filteredSignal = filterPeak(resampledSignal, frequencyOffset);
