@@ -25,7 +25,7 @@ end
 
 function message = binaryToMessage(sbinary)
     message = blanks(length(sbinary)/7);
-    for i = 1:(length(sbinary)/7)
+    for i = 1:(length(sbinary)/7);
         decLetter = bin2dec(sbinary(1:7));
         strLetter = char(decLetter);
         message(i) = strLetter;
@@ -65,11 +65,14 @@ function contractedMessage = contractMessage(message, n)
         for i = 1:(length(message)/n)
             pulse = message(1:n);
             average = mean(pulse);
-            if average <= 0
-                contractedMessage = cat(2, contractedMessage, -1);
+            if average >= 1
+                contractedMessage = cat(2, contractedMessage, 2);
+            elseif average <= -1
+                contractedMessage = cat(2, contractedMessage, -2);
             else
-                contractedMessage = cat(2, contractedMessage, 1);
-            end  
+                contractedMessage = cat(2, contractedMessage, 0);
+            end
+                
             if length(message)~= n
                 message = message((n+1):end);
             end
