@@ -8,10 +8,12 @@ function res = Transmitter(user1, message1, user2, message2)
     I = encodedMessage1;
     Q = encodedMessage2;
     
-    packet = 4000;
+    npacket = 1000;
     
-    TransmitI = vertcat(ones(packet,1),I);
-    TransmitQ = vertcat(ones(packet,1),Q);
+    training = ones(npacket,1);
+    
+    TransmitI = vertcat(training, I, training);
+    TransmitQ = vertcat(training, Q, training);
     
     length(TransmitI)
     
